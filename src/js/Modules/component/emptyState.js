@@ -15,14 +15,13 @@ export function renderEmptyState(containerId, options) {
     "<p>" +
     subtitle +
     "</p>" +
-    '<button id="empty-state-btn" class="btn-primary"><i class="fa-solid fa-globe"></i> ' +
-        'Go to Dashboard' +
-        "</button>"
-     +
+    '<button class="btn-primary empty-state-btn"><i class="fa-solid fa-globe"></i> ' +
+    "Go to Dashboard" +
+    "</button>" +
     "</div>";
 
   if ( onButtonClick) {
-    const btn = document.getElementById("empty-state-btn");
+    const btn = container.querySelector(".empty-state-btn");
     btn.addEventListener("click", onButtonClick);
   }
 }

@@ -108,6 +108,9 @@ export async function initLongWeekendsView() {
         icon: "fa-solid fa-triangle-exclamation",
         title: "Couldn't Load Long Weekends",
         subtitle: "Something went wrong while fetching data. Please try again.",
+        onButtonClick: function () {
+          goToView("dashboard");
+        },
       });
       return;
     }

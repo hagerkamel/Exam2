@@ -20,6 +20,9 @@ function renderNoCitySelected() {
     title: "No City Selected",
     subtitle:
       "Select a country and city from the dashboard to check the weather",
+    onButtonClick: function () {
+      goToView("dashboard");
+    },
   });
 }
 
@@ -73,6 +76,9 @@ export async function initWeatherView() {
         icon: "fa-solid fa-cloud-sun",
         title: "Location Not Found",
         subtitle: "Couldn't find coordinates for this city",
+        onButtonClick: function () {
+          goToView("dashboard");
+        },
       });
       return;
     }
