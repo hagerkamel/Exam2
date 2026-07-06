@@ -7,7 +7,7 @@ import { initDestinationSearch } from "./Dashboard/destinationSearch.js";
 import { initHolidaysView } from "./Holidays/holidaysView.js";
 import { initEventsView } from "./EventsPage/eventsView.js";
 import { initWeatherView } from "./Weather/weatherView.js";
-import { initLongWeekendsView } from "./longWeekends/longWeekendsView.js";
+import { initLongWeekendsView } from "./LongWeekends/longWeekendsView.js";
 import { initCurrencyView } from "./currency/currencyView.js";
 import { initSunTimesView } from "./sunTimes/sunTimesView.js";
 import { initPlansView } from "./plans/plansView.js";
