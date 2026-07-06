@@ -1,0 +1,1086 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wanderlust - Your Global Travel Planner (Starter)</title>
+
+    <!-- Font Awesome -->
+    <script>
+      window.FontAwesomeConfig = { autoReplaceSvg: "nest" };
+    </script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Stylesheets-->
+    <link rel="stylesheet" href="./src/css/base.css" />
+    <link rel="stylesheet" href="./src/css/layout.css" />
+    <link rel="stylesheet" href="./src/css/components.css" />
+    <link rel="stylesheet" href="./src/css/dashboard.css" />
+    <link rel="stylesheet" href="./src/css/views.css" />
+    <link rel="stylesheet" href="./src/css/weather.css" />
+    <link rel="stylesheet" href="./src/css/widgets.css" />
+    <link rel="stylesheet" href="./src/css/utilities.css" />
+  </head>
+  <body>
+    <div id="app" class="flex min-h-screen">
+      <!-- ======================= SIDEBAR ======================= -->
+      <aside id="sidebar" class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-icon"><i class="fa-solid fa-paper-plane"></i></div>
+          <span class="logo-text">Wanderlust</span>
+        </div>
+
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <span class="nav-section-title">Main</span>
+            <a href="#" data-view="dashboard" class="nav-item active">
+              <i class="fa-solid fa-house"></i><span>Dashboard</span>
+            </a>
+          </div>
+
+          <div class="nav-section">
+            <span class="nav-section-title">Explore</span>
+            <a href="#" data-view="holidays" class="nav-item">
+              <i class="fa-solid fa-calendar-days"></i><span>Holidays</span>
+            </a>
+            <a href="#" data-view="events" class="nav-item">
+              <i class="fa-solid fa-ticket"></i><span>Events</span>
+            </a>
+            <a href="#" data-view="weather" class="nav-item">
+              <i class="fa-solid fa-cloud-sun"></i><span>Weather</span>
+            </a>
+            <a href="#" data-view="long-weekends" class="nav-item">
+              <i class="fa-solid fa-umbrella-beach"></i
+              ><span>Long Weekends</span>
+            </a>
+          </div>
+
+          <div class="nav-section">
+            <span class="nav-section-title">Travel Tools</span>
+            <a href="#" data-view="currency" class="nav-item">
+              <i class="fa-solid fa-money-bill-transfer"></i
+              ><span>Currency</span>
+            </a>
+            <a href="#" data-view="sun-times" class="nav-item">
+              <i class="fa-solid fa-sun"></i><span>Sun Times</span>
+            </a>
+          </div>
+
+          <div class="nav-section">
+            <span class="nav-section-title">Personal</span>
+            <a href="#" data-view="my-plans" class="nav-item">
+              <i class="fa-solid fa-heart"></i><span>My Plans</span>
+              <span id="plans-count" class="nav-badge hidden">0</span>
+            </a>
+          </div>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+            <div class="user-info">
+              <span class="user-name">Traveler</span>
+              <span class="user-status">Planning mode</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
+
+      <!-- ======================= MAIN CONTENT ======================= -->
+      <div class="main-wrapper">
+        <!-- ======================= TOP HEADER ======================= -->
+        <header id="top-header" class="top-header">
+          <button id="mobile-menu-btn" class="mobile-menu-btn">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+
+          <div class="header-title">
+            <h1 id="page-title">Dashboard</h1>
+            <p id="page-subtitle">
+              Welcome back! Ready to plan your next adventure?
+            </p>
+          </div>
+
+          <div class="header-actions">
+            <div class="header-datetime">
+              <i class="fa-regular fa-clock"></i>
+              <span id="current-datetime">Sat, Jan 25, 08:30 AM</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- ======================= MAIN CONTENT AREA ======================= -->
+        <main id="main-content" class="main-content">
+          <!-- ==================== DASHBOARD VIEW ==================== -->
+          <section id="dashboard-view" class="view active">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+              <div class="stat-card stat-primary">
+                <div class="stat-icon">
+                  <i class="fa-solid fa-earth-americas"></i>
+                </div>
+                <div class="stat-content">
+                  <span class="stat-value" id="stat-countries">90+</span>
+                  <span class="stat-label">Countries Available</span>
+                </div>
+              </div>
+              <div class="stat-card stat-success">
+                <div class="stat-icon">
+                  <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div class="stat-content">
+                  <span class="stat-value" id="stat-holidays">17</span>
+                  <span class="stat-label">Holidays This Year</span>
+                </div>
+              </div>
+              <div class="stat-card stat-warning">
+                <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+                <div class="stat-content">
+                  <span class="stat-value" id="stat-events">500+</span>
+                  <span class="stat-label">Events Worldwide</span>
+                </div>
+              </div>
+              <div class="stat-card stat-danger">
+                <div class="stat-icon"><i class="fa-solid fa-heart"></i></div>
+                <div class="stat-content">
+                  <span class="stat-value" id="stat-saved">0</span>
+                  <span class="stat-label">Saved Plans</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Global Country Search -->
+            <div class="section-card search-section">
+              <div class="section-header">
+                <h2>
+                  <i class="fa-solid fa-globe"></i> Select Your Destination
+                </h2>
+                <p class="section-subtitle">
+                  Choose a country to explore holidays, events, weather, and
+                  more
+                </p>
+              </div>
+              <div class="dashboard-search-form">
+                <div class="search-form-row">
+                  <div class="form-group flex-2">
+                    <label
+                      ><i class="fa-solid fa-earth-americas"></i> Country</label
+                    >
+                    <div class="custom-select-wrapper">
+                      <div id="countryInput" class="custom-select-input">
+                        <span id="countryInputText">Select Country</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+                      <div
+                        id="countryDropdown"
+                        class="custom-dropdown-panel hidden"
+                      >
+                        <input
+                          type="text"
+                          id="countrySearch"
+                          class="dropdown-search"
+                          placeholder="Search countries..."
+                        />
+                        <div id="countryList" class="dropdown-list"></div>
+                      </div>
+                    </div>
+                    <!-- TODO: Populate dynamically from API -->
+                  </div>
+                  <div class="form-group flex-2">
+                    <label><i class="fa-solid fa-city"></i> City</label>
+                    <div class="custom-select-wrapper">
+                      <div id="cityInput" class="custom-select-input">
+                        <span id="cityInputText">Select City</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+                      <div
+                        id="cityDropdown"
+                        class="custom-dropdown-panel hidden"
+                      >
+                        <div id="cityList" class="dropdown-list"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group flex-1">
+                    <label><i class="fa-solid fa-calendar"></i> Year</label>
+                    <div class="custom-select-wrapper">
+                      <div id="yearInput" class="custom-select-input">
+                        <span id="yearInputText">2026</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+                      <div
+                        id="yearDropdown"
+                        class="custom-dropdown-panel hidden"
+                      >
+                        <div id="yearList" class="dropdown-list"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group search-btn-group">
+                    <label>&nbsp;</label>
+                    <button
+                      type="button"
+                      id="global-search-btn"
+                      class="btn btn-primary btn-explore"
+                    >
+                      <i class="fa-solid fa-magnifying-glass"></i>
+                      <span>Explore</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Selected Destination Display - STATIC EGYPT DATA -->
+                <div id="selected-destination" class="selected-destination">
+                  <div class="selected-flag">
+                    <img id="selected-country-flag" src=".." alt="Egypt" />
+                  </div>
+                  <div class="selected-info">
+                    <span
+                      class="selected-country-name"
+                      id="selected-country-name"
+                      >Egypt</span
+                    >
+                    <span class="selected-city-name" id="selected-city-name"
+                      >• Cairo</span
+                    >
+                  </div>
+                  <button class="clear-selection-btn" id="clear-selection-btn">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Country Info Section - STATIC EGYPT DATA -->
+            <div id="dashboard-country-info" class="dashboard-country-info">
+              <div class="empty-state">
+                <div class="empty-state-icon">
+                  <i class="fa-solid fa-globe"></i>
+                </div>
+                <p>Select a country to view detailed information</p>
+              </div>
+            </div>
+            <!-- <div
+              class="section-card country-info-section"
+              id="dashboard-country-info-section"
+            >
+              <div class="section-header">
+                <h2><i class="fa-solid fa-flag"></i> Country Information</h2>
+              </div>
+              <div id="dashboard-country-info" class="dashboard-country-info">
+                <div class="dashboard-country-header">
+                  <img
+                    src="https://flagcdn.com/w160/eg.png"
+                    alt="Egypt"
+                    class="dashboard-country-flag"
+                  />
+                  <div class="dashboard-country-title">
+                    <h3>Egypt</h3>
+                    <p class="official-name">Arab Republic of Egypt</p>
+                    <span class="region"
+                      ><i class="fa-solid fa-location-dot"></i> Africa •
+                      Northern Africa</span
+                    >
+                  </div>
+                </div>
+
+                <div class="dashboard-local-time">
+                  <div class="local-time-display">
+                    <i class="fa-solid fa-clock"></i>
+                    <span class="local-time-value" id="country-local-time"
+                      >08:30:45 AM</span
+                    >
+                    <span class="local-time-zone">UTC+02:00</span>
+                  </div>
+                </div>
+
+                <div class="dashboard-country-grid">
+                  <div class="dashboard-country-detail">
+                    <i class="fa-solid fa-building-columns"></i>
+                    <span class="label">Capital</span>
+                    <span class="value">Cairo</span>
+                  </div>
+                  <div class="dashboard-country-detail">
+                    <i class="fa-solid fa-users"></i>
+                    <span class="label">Population</span>
+                    <span class="value">102,334,403</span>
+                  </div>
+                  <div class="dashboard-country-detail">
+                    <i class="fa-solid fa-ruler-combined"></i>
+                    <span class="label">Area</span>
+                    <span class="value">1,002,450 km²</span>
+                  </div>
+                  <div class="dashboard-country-detail">
+                    <i class="fa-solid fa-globe"></i>
+                    <span class="label">Continent</span>
+                    <span class="value">Africa</span>
+                  </div>
+                  <div class="dashboard-country-detail">
+                    <i class="fa-solid fa-phone"></i>
+                    <span class="label">Calling Code</span>
+                    <span class="value">+20</span>
+                  </div>
+                  <div class="dashboard-country-detail">
+                    <i class="fa-solid fa-car"></i>
+                    <span class="label">Driving Side</span>
+                    <span class="value">Right</span>
+                  </div>
+                  <div class="dashboard-country-detail">
+                    <i class="fa-solid fa-calendar-week"></i>
+                    <span class="label">Week Starts</span>
+                    <span class="value">Saturday</span>
+                  </div>
+                </div>
+
+                <div class="dashboard-country-extras">
+                  <div class="dashboard-country-extra">
+                    <h4><i class="fa-solid fa-coins"></i> Currency</h4>
+                    <div class="extra-tags">
+                      <span class="extra-tag">Egyptian Pound (EGP £)</span>
+                    </div>
+                  </div>
+                  <div class="dashboard-country-extra">
+                    <h4><i class="fa-solid fa-language"></i> Languages</h4>
+                    <div class="extra-tags">
+                      <span class="extra-tag">Arabic</span>
+                    </div>
+                  </div>
+                  <div class="dashboard-country-extra">
+                    <h4>
+                      <i class="fa-solid fa-map-location-dot"></i> Neighbors
+                    </h4>
+                    <div class="extra-tags">
+                      <span class="extra-tag border-tag">LBY</span>
+                      <span class="extra-tag border-tag">SDN</span>
+                      <span class="extra-tag border-tag">ISR</span>
+                      <span class="extra-tag border-tag">PSE</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="dashboard-country-actions">
+                  <a
+                    href="https://www.google.com/maps/place/Egypt"
+                    target="_blank"
+                    class="btn-map-link"
+                  >
+                    <i class="fa-solid fa-map"></i> View on Google Maps
+                  </a>
+                </div>
+              </div>
+            </div> -->
+          </section>
+
+          <!-- ==================== HOLIDAYS VIEW - STATIC EGYPT 2026 DATA ==================== -->
+          <section id="holidays-view" class="view">
+            <div class="view-header-card gradient-green">
+              <div class="view-header-icon">
+                <i class="fa-solid fa-calendar-days"></i>
+              </div>
+              <div class="view-header-content">
+                <h2>Public Holidays Explorer</h2>
+                <p>
+                  Browse public holidays for Egypt and plan your trips around
+                  them
+                </p>
+              </div>
+              <div class="view-header-selection" id="holidays-selection"></div>
+            </div>
+
+            <div id="holidays-content" class="holidays-content"></div>
+          </section>
+
+          <!-- ==================== EVENTS VIEW - STATIC CAIRO DATA ==================== -->
+          <section id="events-view" class="view">
+            <div class="view-header-card gradient-purple">
+              <div class="view-header-icon">
+                <i class="fa-solid fa-ticket"></i>
+              </div>
+              <div class="view-header-content">
+                <h2>Events Explorer</h2>
+                <p>Discover concerts, sports, theatre and more in Cairo</p>
+              </div>
+              <div class="view-header-selection" id="events-selection"></div>
+            </div>
+            <div id="events-content" class="events-grid-layout"></div>
+          </section>
+
+          <!-- ==================== WEATHER VIEW - STATIC CAIRO DATA ==================== -->
+          <section id="weather-view" class="view">
+            <div class="view-header-card gradient-blue">
+              <div class="view-header-icon">
+                <i class="fa-solid fa-cloud-sun"></i>
+              </div>
+              <div class="view-header-content">
+                <h2>Weather Forecast</h2>
+                <p>Check 7-day weather forecasts for Cairo</p>
+              </div>
+              <div class="view-header-selection" id="weather-selection"></div>
+            </div>
+
+            <div id="weather-content" class="weather-layout">
+              <!-- Current Weather Hero -->
+              <div class="weather-hero-card weather-sunny">
+                <div class="weather-location">
+                  <i class="fa-solid fa-location-dot"></i>
+                  <span>Cairo</span>
+                  <span class="weather-time">Saturday, January 25, 2026</span>
+                </div>
+                <div class="weather-hero-main">
+                  <div class="weather-hero-left">
+                    <div class="weather-hero-icon">
+                      <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <div class="weather-hero-temp">
+                      <span class="temp-value">22</span>
+                      <span class="temp-unit">°C</span>
+                    </div>
+                  </div>
+                  <div class="weather-hero-right">
+                    <div class="weather-condition">Clear sky</div>
+                    <div class="weather-feels">Feels like 21°C</div>
+                    <div class="weather-high-low">
+                      <span class="high"
+                        ><i class="fa-solid fa-arrow-up"></i> 25°</span
+                      >
+                      <span class="low"
+                        ><i class="fa-solid fa-arrow-down"></i> 12°</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Weather Details Grid -->
+              <div class="weather-details-grid">
+                <div class="weather-detail-card">
+                  <div class="detail-icon humidity">
+                    <i class="fa-solid fa-droplet"></i>
+                  </div>
+                  <div class="detail-info">
+                    <span class="detail-label">Humidity</span>
+                    <span class="detail-value">45%</span>
+                  </div>
+                </div>
+                <div class="weather-detail-card">
+                  <div class="detail-icon wind">
+                    <i class="fa-solid fa-wind"></i>
+                  </div>
+                  <div class="detail-info">
+                    <span class="detail-label">Wind</span>
+                    <span class="detail-value">15 km/h</span>
+                  </div>
+                </div>
+                <div class="weather-detail-card">
+                  <div class="detail-icon uv">
+                    <i class="fa-solid fa-sun"></i>
+                  </div>
+                  <div class="detail-info">
+                    <span class="detail-label">UV Index</span>
+                    <span class="detail-value">6</span>
+                  </div>
+                </div>
+                <div class="weather-detail-card">
+                  <div class="detail-icon precip">
+                    <i class="fa-solid fa-cloud-rain"></i>
+                  </div>
+                  <div class="detail-info">
+                    <span class="detail-label">Precipitation</span>
+                    <span class="detail-value">0%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hourly Forecast -->
+              <div class="weather-section">
+                <h3 class="weather-section-title">
+                  <i class="fa-solid fa-clock"></i> Hourly Forecast
+                </h3>
+                <div class="hourly-scroll">
+                  <div class="hourly-item now">
+                    <span class="hourly-time">Now</span>
+                    <div class="hourly-icon">
+                      <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <span class="hourly-temp">22°</span>
+                  </div>
+                  <div class="hourly-item">
+                    <span class="hourly-time">10 AM</span>
+                    <div class="hourly-icon">
+                      <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <span class="hourly-temp">23°</span>
+                  </div>
+                  <div class="hourly-item">
+                    <span class="hourly-time">11 AM</span>
+                    <div class="hourly-icon">
+                      <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <span class="hourly-temp">24°</span>
+                  </div>
+                  <div class="hourly-item">
+                    <span class="hourly-time">12 PM</span>
+                    <div class="hourly-icon">
+                      <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <span class="hourly-temp">25°</span>
+                  </div>
+                  <div class="hourly-item">
+                    <span class="hourly-time">1 PM</span>
+                    <div class="hourly-icon">
+                      <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <span class="hourly-temp">25°</span>
+                  </div>
+                  <div class="hourly-item">
+                    <span class="hourly-time">2 PM</span>
+                    <div class="hourly-icon">
+                      <i class="fa-solid fa-cloud-sun"></i>
+                    </div>
+                    <span class="hourly-temp">24°</span>
+                  </div>
+                  <div class="hourly-item">
+                    <span class="hourly-time">3 PM</span>
+                    <div class="hourly-icon">
+                      <i class="fa-solid fa-cloud-sun"></i>
+                    </div>
+                    <span class="hourly-temp">23°</span>
+                  </div>
+                  <div class="hourly-item">
+                    <span class="hourly-time">4 PM</span>
+                    <div class="hourly-icon">
+                      <i class="fa-solid fa-cloud"></i>
+                    </div>
+                    <span class="hourly-temp">21°</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 7-Day Forecast -->
+              <div class="weather-section">
+                <h3 class="weather-section-title">
+                  <i class="fa-solid fa-calendar-week"></i> 7-Day Forecast
+                </h3>
+                <div class="forecast-list">
+                  <div class="forecast-day today">
+                    <div class="forecast-day-name">
+                      <span class="day-label">Today</span
+                      ><span class="day-date">25 Jan</span>
+                    </div>
+                    <div class="forecast-icon">
+                      <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <div class="forecast-temps">
+                      <span class="temp-max">25°</span
+                      ><span class="temp-min">12°</span>
+                    </div>
+                    <div class="forecast-precip"></div>
+                  </div>
+                  <div class="forecast-day">
+                    <div class="forecast-day-name">
+                      <span class="day-label">Sun</span
+                      ><span class="day-date">26 Jan</span>
+                    </div>
+                    <div class="forecast-icon">
+                      <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <div class="forecast-temps">
+                      <span class="temp-max">24°</span
+                      ><span class="temp-min">11°</span>
+                    </div>
+                    <div class="forecast-precip"></div>
+                  </div>
+                  <div class="forecast-day">
+                    <div class="forecast-day-name">
+                      <span class="day-label">Mon</span
+                      ><span class="day-date">27 Jan</span>
+                    </div>
+                    <div class="forecast-icon">
+                      <i class="fa-solid fa-cloud-sun"></i>
+                    </div>
+                    <div class="forecast-temps">
+                      <span class="temp-max">23°</span
+                      ><span class="temp-min">12°</span>
+                    </div>
+                    <div class="forecast-precip">
+                      <i class="fa-solid fa-droplet"></i><span>10%</span>
+                    </div>
+                  </div>
+                  <div class="forecast-day">
+                    <div class="forecast-day-name">
+                      <span class="day-label">Tue</span
+                      ><span class="day-date">28 Jan</span>
+                    </div>
+                    <div class="forecast-icon">
+                      <i class="fa-solid fa-cloud"></i>
+                    </div>
+                    <div class="forecast-temps">
+                      <span class="temp-max">21°</span
+                      ><span class="temp-min">10°</span>
+                    </div>
+                    <div class="forecast-precip">
+                      <i class="fa-solid fa-droplet"></i><span>20%</span>
+                    </div>
+                  </div>
+                  <div class="forecast-day">
+                    <div class="forecast-day-name">
+                      <span class="day-label">Wed</span
+                      ><span class="day-date">29 Jan</span>
+                    </div>
+                    <div class="forecast-icon">
+                      <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <div class="forecast-temps">
+                      <span class="temp-max">22°</span
+                      ><span class="temp-min">11°</span>
+                    </div>
+                    <div class="forecast-precip"></div>
+                  </div>
+                  <div class="forecast-day">
+                    <div class="forecast-day-name">
+                      <span class="day-label">Thu</span
+                      ><span class="day-date">30 Jan</span>
+                    </div>
+                    <div class="forecast-icon">
+                      <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <div class="forecast-temps">
+                      <span class="temp-max">24°</span
+                      ><span class="temp-min">12°</span>
+                    </div>
+                    <div class="forecast-precip"></div>
+                  </div>
+                  <div class="forecast-day">
+                    <div class="forecast-day-name">
+                      <span class="day-label">Fri</span
+                      ><span class="day-date">31 Jan</span>
+                    </div>
+                    <div class="forecast-icon">
+                      <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <div class="forecast-temps">
+                      <span class="temp-max">25°</span
+                      ><span class="temp-min">13°</span>
+                    </div>
+                    <div class="forecast-precip"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== LONG WEEKENDS VIEW - STATIC EGYPT DATA ==================== -->
+          <section id="long-weekends-view" class="view">
+            <div class="view-header-card gradient-orange">
+              <div class="view-header-icon">
+                <i class="fa-solid fa-umbrella-beach"></i>
+              </div>
+              <div class="view-header-content">
+                <h2>Long Weekend Finder</h2>
+                <p>
+                  Find holidays near weekends - perfect for planning mini-trips!
+                </p>
+              </div>
+              <div class="view-header-selection">
+                <div
+                  class="current-selection-badge"
+                  id="lw-selection-badge"
+                ></div>
+              </div>
+            </div>
+
+            <div id="lw-content" class="lw-grid"></div>
+          </section>
+
+          <!-- ==================== CURRENCY CONVERTER VIEW - STATIC DATA ==================== -->
+          <section id="currency-view" class="view">
+            <div class="view-header-card gradient-gold">
+              <div class="view-header-icon">
+                <i class="fa-solid fa-money-bill-transfer"></i>
+              </div>
+              <div class="view-header-content">
+                <h2>Currency Converter</h2>
+                <p>Convert between currencies with live exchange rates</p>
+              </div>
+            </div>
+
+            <div class="currency-converter-card">
+              <div class="currency-form">
+                <div class="currency-input-group">
+                  <label>Amount</label>
+                  <input
+                    type="number"
+                    id="currency-amount"
+                    class="currency-amount-input"
+                    value="100"
+                    min="0"
+                  />
+                </div>
+
+                <div class="currency-selects">
+                  <div class="currency-select-group">
+                    <label>From</label>
+                    <select id="currency-from" class="form-select">
+                      <option value="USD" selected>USD - US Dollar</option>
+                      <option value="EUR">EUR - Euro</option>
+                      <option value="GBP">GBP - British Pound</option>
+                    </select>
+                  </div>
+                  <div class="currency-swap-wrapper">
+                    <button class="currency-swap-btn" id="swap-currencies-btn">
+                      <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                    </button>
+                  </div>
+                  <div class="currency-select-group">
+                    <label>To</label>
+                    <select id="currency-to" class="form-select">
+                      <option value="EGP" selected>EGP - Egyptian Pound</option>
+                      <option value="EUR">EUR - Euro</option>
+                      <option value="USD">USD - US Dollar</option>
+                    </select>
+                  </div>
+                </div>
+
+                <button class="btn-primary btn-lg" id="convert-btn">
+                  <i class="fa-solid fa-calculator"></i> Convert
+                </button>
+              </div>
+
+              <!-- Static Conversion Result -->
+              <div id="currency-result" class="currency-result">
+                <div class="conversion-display">
+                  <div class="conversion-from">
+                    <span class="amount">100.00</span>
+                    <span class="currency-code">USD</span>
+                  </div>
+                  <div class="conversion-equals">
+                    <i class="fa-solid fa-equals"></i>
+                  </div>
+                  <div class="conversion-to">
+                    <span class="amount">3,090.00</span>
+                    <span class="currency-code">EGP</span>
+                  </div>
+                </div>
+                <div class="exchange-rate-info">
+                  <p>1 USD = 30.90 EGP</p>
+                  <small>Last updated: January 25, 2026</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-card">
+              <div class="section-header">
+                <h2><i class="fa-solid fa-star"></i> Quick Convert</h2>
+              </div>
+              <div class="popular-currencies-grid" id="popular-currencies">
+                <div class="popular-currency-card">
+                  <img
+                    src="https://flagcdn.com/w40/eu.png"
+                    alt="EUR"
+                    class="flag"
+                  />
+                  <div class="info">
+                    <div class="code">EUR</div>
+                    <div class="name">Euro</div>
+                  </div>
+                  <div class="rate">0.9200</div>
+                </div>
+                <div class="popular-currency-card">
+                  <img
+                    src="https://flagcdn.com/w40/gb.png"
+                    alt="GBP"
+                    class="flag"
+                  />
+                  <div class="info">
+                    <div class="code">GBP</div>
+                    <div class="name">British Pound</div>
+                  </div>
+                  <div class="rate">0.7900</div>
+                </div>
+                <div class="popular-currency-card">
+                  <img
+                    src="https://flagcdn.com/w40/eg.png"
+                    alt="EGP"
+                    class="flag"
+                  />
+                  <div class="info">
+                    <div class="code">EGP</div>
+                    <div class="name">Egyptian Pound</div>
+                  </div>
+                  <div class="rate">30.9000</div>
+                </div>
+                <div class="popular-currency-card">
+                  <img
+                    src="https://flagcdn.com/w40/ae.png"
+                    alt="AED"
+                    class="flag"
+                  />
+                  <div class="info">
+                    <div class="code">AED</div>
+                    <div class="name">UAE Dirham</div>
+                  </div>
+                  <div class="rate">3.6725</div>
+                </div>
+                <div class="popular-currency-card">
+                  <img
+                    src="https://flagcdn.com/w40/sa.png"
+                    alt="SAR"
+                    class="flag"
+                  />
+                  <div class="info">
+                    <div class="code">SAR</div>
+                    <div class="name">Saudi Riyal</div>
+                  </div>
+                  <div class="rate">3.7500</div>
+                </div>
+                <div class="popular-currency-card">
+                  <img
+                    src="https://flagcdn.com/w40/jp.png"
+                    alt="JPY"
+                    class="flag"
+                  />
+                  <div class="info">
+                    <div class="code">JPY</div>
+                    <div class="name">Japanese Yen</div>
+                  </div>
+                  <div class="rate">148.50</div>
+                </div>
+                <div class="popular-currency-card">
+                  <img
+                    src="https://flagcdn.com/w40/ca.png"
+                    alt="CAD"
+                    class="flag"
+                  />
+                  <div class="info">
+                    <div class="code">CAD</div>
+                    <div class="name">Canadian Dollar</div>
+                  </div>
+                  <div class="rate">1.3500</div>
+                </div>
+                <div class="popular-currency-card">
+                  <img
+                    src="https://flagcdn.com/w40/in.png"
+                    alt="INR"
+                    class="flag"
+                  />
+                  <div class="info">
+                    <div class="code">INR</div>
+                    <div class="name">Indian Rupee</div>
+                  </div>
+                  <div class="rate">83.10</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== SUN TIMES VIEW - STATIC DATA  ==================== -->
+          <section id="sun-times-view" class="view">
+            <div class="view-header-card gradient-sunset">
+              <div class="view-header-icon">
+                <i class="fa-solid fa-sun"></i>
+              </div>
+              <div class="view-header-content">
+                <h2>Sunrise & Sunset Times</h2>
+                <p>
+                  Plan your activities around golden hour - perfect for
+                  photographers
+                </p>
+              </div>
+              <div class="view-header-selection">
+                <div id="sun-selection-badge"></div>
+              </div>
+            </div>
+            <!-- class="current-selection-badge" -->
+
+            <div id="sun-times-empty" class="hidden"></div>
+
+            <div id="sun-times-content" class="sun-times-layout hidden">
+              <div class="sun-main-card">
+                <div class="sun-main-header">
+                  <div class="sun-location">
+                    <h2>
+                      <i class="fa-solid fa-location-dot"></i>
+                      <span id="sun-city-name"></span>
+                    </h2>
+                    <p>Sun times for your selected location</p>
+                  </div>
+                  <div class="sun-date-display">
+                    <div id="sun-date" class="date"></div>
+                    <div id="sun-day" class="day"></div>
+                  </div>
+                </div>
+                <div class="sun-times-grid">
+                  <div class="sun-time-card dawn">
+                    <div class="icon"><i class="fa-solid fa-moon"></i></div>
+                    <div class="label">Dawn</div>
+                    <div id="sun-dawn-time" class="time">--:--</div>
+                    <div class="sub-label">Civil Twilight</div>
+                  </div>
+                  <div class="sun-time-card sunrise">
+                    <div class="icon"><i class="fa-solid fa-sun"></i></div>
+                    <div class="label">Sunrise</div>
+                    <div id="sun-sunrise-time" class="time">--:--</div>
+                    <div class="sub-label">Golden Hour Start</div>
+                  </div>
+                  <div class="sun-time-card noon">
+                    <div class="icon"><i class="fa-solid fa-sun"></i></div>
+                    <div class="label">Solar Noon</div>
+                    <div id="sun-noon-time" class="time">--:--</div>
+                    <div class="sub-label">Sun at Highest</div>
+                  </div>
+                  <div class="sun-time-card sunset">
+                    <div class="icon"><i class="fa-solid fa-sun"></i></div>
+                    <div class="label">Sunset</div>
+                    <div id="sun-sunset-time" class="time">--:--</div>
+                    <div class="sub-label">Golden Hour End</div>
+                  </div>
+                  <div class="sun-time-card dusk">
+                    <div class="icon"><i class="fa-solid fa-moon"></i></div>
+                    <div class="label">Dusk</div>
+                    <div id="sun-dusk-time" class="time">--:--</div>
+                    <div class="sub-label">Civil Twilight</div>
+                  </div>
+                  <div class="sun-time-card daylight">
+                    <div class="icon">
+                      <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
+                    <div class="label">Day Length</div>
+                    <div id="sun-daylength-time" class="time">--</div>
+                    <div class="sub-label">Total Daylight</div>
+                  </div>
+                </div>
+              </div>
+              <div class="day-length-card">
+                <h3>
+                  <i class="fa-solid fa-chart-pie"></i> Daylight Distribution
+                </h3>
+                <div class="day-progress">
+                  <div class="day-progress-bar">
+                    <div
+                      id="sun-progress-fill"
+                      class="day-progress-fill"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="day-length-stats">
+                  <div class="day-stat">
+                    <div id="sun-stat-daylight" class="value">--</div>
+                    <div class="label">Daylight</div>
+                  </div>
+                  <div class="day-stat">
+                    <div id="sun-stat-percent" class="value">--</div>
+                    <div class="label">of 24 Hours</div>
+                  </div>
+                  <div class="day-stat">
+                    <div id="sun-stat-darkness" class="value">--</div>
+                    <div class="label">Darkness</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- ==================== MY PLANS VIEW - EMPTY STATE ==================== -->
+          <section id="my-plans-view" class="view">
+            <div class="view-header-card gradient-pink">
+              <div class="view-header-icon">
+                <i class="fa-solid fa-heart"></i>
+              </div>
+              <div class="view-header-content">
+                <h2>My Saved Plans</h2>
+                <p>
+                  Your saved holidays, events, and trip ideas all in one place
+                </p>
+              </div>
+              <div class="plans-actions">
+                <button class="btn-white-outline" id="clear-all-plans-btn">
+                  <i class="fa-solid fa-trash"></i> Clear All
+                </button>
+              </div>
+            </div>
+
+            <div class="plans-filter-bar">
+              <button class="plan-filter active" data-filter="all">
+                <i class="fa-solid fa-layer-group"></i> All
+                <span class="filter-count" id="filter-all-count">0</span>
+              </button>
+              <button class="plan-filter" data-filter="holiday">
+                <i class="fa-solid fa-calendar-check"></i> Holidays
+                <span class="filter-count" id="filter-holiday-count">0</span>
+              </button>
+              <button class="plan-filter" data-filter="event">
+                <i class="fa-solid fa-ticket"></i> Events
+                <span class="filter-count" id="filter-event-count">0</span>
+              </button>
+              <button class="plan-filter" data-filter="longweekend">
+                <i class="fa-solid fa-umbrella-beach"></i> Long Weekends
+                <span class="filter-count" id="filter-lw-count">0</span>
+              </button>
+            </div>
+
+            <div id="plans-content" class="plans-grid">
+              <div class="empty-state">
+                <div class="empty-icon">
+                  <i class="fa-solid fa-heart-crack"></i>
+                </div>
+                <h3>No Saved Plans Yet</h3>
+                <p>
+                  Start exploring and save holidays, events, or long weekends
+                  you like!
+                </p>
+                <button class="btn-primary" id="start-exploring-btn">
+                  <i class="fa-solid fa-compass"></i> Start Exploring
+                </button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+      <div class="loading-content">
+        <div class="loading-spinner">
+          <i
+            class="fa-solid fa-paper-plane fa-spin"
+            style="font-size: 32px; color: var(--primary-500)"
+          ></i>
+        </div>
+        <p id="loading-text">Loading...</p>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Modal -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+      <div class="modal-content">
+        <button class="modal-close" id="modal-close-btn">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Main JavaScript -->
+    <script type="module" src="./src/js/Modules/main.js"></script>
+  </body>
+</html>
