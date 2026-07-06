@@ -20,9 +20,6 @@ function renderNoCitySelected() {
     title: "No City Selected",
     subtitle:
       "Select a country and city from the dashboard to check the weather",
-    onButtonClick: function () {
-      goToView("dashboard");
-    },
   });
 }
 
